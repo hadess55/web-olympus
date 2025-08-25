@@ -17,3 +17,5 @@ cara menggunakan:
 -   Jalankan perintah php artisan key:generate
 
 -   Jalankan perintah php artisan make:filament-user untuk menambahkan user admin
+
+-   Jalankan perintah php artisan migrate untuk migrasi databse
