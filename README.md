@@ -1,19 +1,49 @@
-Website ini dibuild menggunakan Laravel dan filamentphp
+# Website Laravel + FilamentPHP
 
-cara menggunakan:
+Proyek ini dibangun menggunakan Laravel dan FilamentPHP sebagai admin panel yang modern, ringan, dan mudah dikustomisasi.
 
--   clone repositori ini
+## Fitur Utama
 
--   Jalankan perintah composer install
+-   Framework Laravel yang powerful dan scalable.
+-   Admin panel menggunakan FilamentPHP v4.
+-   Migrasi database yang cepat dan fleksibel.
+-   Sistem autentikasi dengan user admin bawaan.
 
--   Jalankan Perintah composer require filament/filament:"^4.0" untuk instalasi filament
+## ⚙️ Instalasi & Penggunaan
 
--   Jalankan perintah cp .env.example .env
+Ikuti langkah-langkah berikut untuk menjalankan proyek:
 
--   Isikan konfigurasi database dan juga Environment Variable diatas pada file .env
+1. Clone repositori
+   git clone <url-repository-anda>
+   cd nama-folder
 
--   Jalankan perintah php artisan key:generate
+2. Install dependency Laravel
+   composer install
 
--   Jalankan perintah php artisan migrate untuk migrasi databse
+3. Install FilamentPHP
+   composer require filament/filament:"^4.0"
 
--   Jalankan perintah php artisan make:filament-user untuk menambahkan user admin
+4. Salin file environment
+   cp .env.example .env
+
+5. Atur konfigurasi
+
+    - Sesuaikan database dan environment variable pada file .env
+
+6. Generate application key
+   php artisan key:generate
+
+7. Migrasi database
+   php artisan migrate
+
+8. Buat akun admin
+   php artisan make:filament-user
+
+✅ Sekarang aplikasi sudah siap dijalankan!
+
+## 🛠️ Teknologi yang Digunakan
+
+-   Laravel 10+
+-   FilamentPHP 4
+-   PHP 8.1+
+-   MySQL / PostgreSQL
