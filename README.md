@@ -26,9 +26,7 @@ Ikuti langkah-langkah berikut untuk menjalankan proyek:
 4. Salin file environment
    cp .env.example .env
 
-5. Atur konfigurasi
-
-    - Sesuaikan database dan environment variable pada file .env
+5. Atur konfigurasi Sesuaikan database dan environment variable pada file .env
 
 6. Generate application key
    php artisan key:generate
@@ -39,11 +37,9 @@ Ikuti langkah-langkah berikut untuk menjalankan proyek:
 8. Buat akun admin
    php artisan make:filament-user
 
-✅ Sekarang aplikasi sudah siap dijalankan!
-
 ## 🛠️ Teknologi yang Digunakan
 
--   Laravel 10+
+-   Laravel 12
 -   FilamentPHP 4
--   PHP 8.1+
--   MySQL / PostgreSQL
+-   PHP 8.3+
+-   MySQL
