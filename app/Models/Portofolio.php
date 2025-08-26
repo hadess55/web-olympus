@@ -8,11 +8,14 @@ class Portofolio extends Model
 {
     protected $fillable = [
         'name',
-        'image_1',
-        'image_2',
-        'image_3',
-        'image_4',
-        'image_5',
+        'image',
         'description',
     ];
+
+     protected function casts(): array
+    { 
+        return [
+            'image' => 'array',
+        ];
+    }
 }
