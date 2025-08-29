@@ -25,6 +25,13 @@ class PortofolioForm
                     ->label('Tanggal Buat')
                     ->native(false)
                     ->format('d/m/y'),
+                FileUpload::make('tumbnail')
+                    ->label('Tumbnail')
+                    ->image()
+                    ->maxFiles(1) 
+                    ->disk('public')              
+                    ->directory('tumbnail')   
+                    ->visibility('public'),
                 FileUpload::make('image')
                     ->label('Gambar')
                     ->image()

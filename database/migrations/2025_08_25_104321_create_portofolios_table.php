@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('portofolios', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('tumbnail', 255);
             $table->string('image', 255);
             $table->date('create_date');
             $table->string('description',999);
