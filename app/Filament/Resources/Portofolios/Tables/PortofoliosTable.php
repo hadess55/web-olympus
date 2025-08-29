@@ -15,12 +15,17 @@ class PortofoliosTable
     {
         return $table
             ->columns([
-                TextColumn::make('name'),
+                TextColumn::make('name')
+                        ->label('Project'),
                 ImageColumn::make('image')
+                    ->label('Gambar')
                     ->circular()
                     ->stacked()
                     ->limit(2)
                     ->limitedRemainingText(),
+                TextColumn::make('date_create')
+                    ->label('Tanggal Buat')
+                    ->date('M j, Y')
 
             ])
             ->filters([
