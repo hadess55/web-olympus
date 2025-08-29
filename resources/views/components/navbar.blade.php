@@ -90,9 +90,8 @@
 
       {{-- Actions --}}
       <div class="flex items-center gap-4">
-        <a href="#"
-           class="hidden md:block bg-blue-100 hover:bg-primary text-primary hover:bg-blue-300 text-black px-12 py-3 rounded-full text-lg font-medium transition"
-           @click.prevent="isSignUpOpen = true">
+        <a href="{{ route('project') }}"
+           class="hidden md:block bg-blue-100 hover:bg-primary text-primary hover:bg-blue-300 text-black px-12 py-3 rounded-full text-lg font-medium transition">
           Project
         </a>
 
@@ -144,9 +143,8 @@
         @endforeach
 
         <div class="mt-4 flex flex-col space-y-4 w-full">
-          <a href="#"
-             class="bg-transparent border border-primary text-primary px-4 py-2 rounded-lg text-center hover:bg-gray-600 hover:text-white transition"
-             @click.prevent="navbarOpen=false; isSignInOpen=true">
+          <a href="{{ route('project') }}"
+             class="bg-transparent border border-primary text-primary px-4 py-2 rounded-lg text-center hover:bg-gray-600 hover:text-white transition">
             Project
           </a>
         </div>

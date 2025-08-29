@@ -11,12 +11,8 @@ class HomeController extends Controller
 {
      public function index()
     {
-        // Ambil data; urutkan dari yang terbaru (berdasarkan create_date)
-        $portos = Portofolio::query()
-            ->select(['id','name','image','create_date','description'])
-            ->latest('create_date')
-            ->get();
-
+        $portos = Portofolio::orderByRaw('COALESCE(create_date, created_at, id) DESC')->take(12)->get();
         return view('welcome', compact('portos'));
+
     }
 }
