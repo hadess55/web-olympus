@@ -1,68 +1,83 @@
-{{-- <header class="bg-white dark:bg-gray-800 shadow-lg mt-4 mx-5 rounded-4xl">
-        <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <a href="/" class="text-2xl font-bold text-indigo-800 dark:text-white transition-colors duration-300">
-                <img src="{{ asset('default/Logo.png') }}" alt="logo" class="w-16 h-auto">
-            </a>
-            <div class="hidden md:flex space-x-6">
-                <a href="#" class="nav-link text-gray-700 dark:text-gray-200 hover:text-indigo-800 dark:hover:text-white transition-colors duration-300">Home</a>
-                <a href="#" class="nav-link text-gray-700 dark:text-gray-200 hover:text-indigo-800 dark:hover:text-white transition-colors duration-300">About</a>
-                <a href="#" class="nav-link text-gray-700 dark:text-gray-200 hover:text-indigo-800 dark:hover:text-white transition-colors duration-300">Services</a>
-                <a href="#" class="nav-link text-gray-700 dark:text-gray-200 hover:text-indigo-800 dark:hover:text-white transition-colors duration-300">Contact</a>
-            </div>
-            <div class="hidden md:flex items-center space-x-4">
-                <button id="darkModeToggle" class="text-gray-700 dark:text-gray-200 hover:text-indigo-800 dark:hover:text-white focus:outline-none transition-colors duration-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                    </svg>
-                </button>
-                <a href="#" class="bg-indigo-800 text-white px-4 py-2 rounded-lg hover:bg-blue-900 transition-colors duration-300">Sign Up</a>
-            </div>
-            <button id="mobileMenuButton" class="md:hidden text-gray-700 dark:text-gray-200 hover:text-indigo-800 dark:hover:text-white focus:outline-none transition-colors duration-300">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-            </button>
-        </nav>
-        <div id="mobileMenu" class="mobile-menu md:hidden bg-white dark:bg-gray-800 shadow-lg absolute w-full left-0 transform -translate-y-full opacity-0">
-            <div class="container mx-auto px-4 py-4 space-y-4">
-                <a href="#" class="block text-gray-700 dark:text-gray-200 hover:text-indigo-800 dark:hover:text-white transition-colors duration-300">Home</a>
-                <a href="#" class="block text-gray-700 dark:text-gray-200 hover:text-indigo-800 dark:hover:text-white transition-colors duration-300">About</a>
-                <a href="#" class="block text-gray-700 dark:text-gray-200 hover:text-indigo-800 dark:hover:text-white transition-colors duration-300">Services</a>
-                <a href="#" class="block text-gray-700 dark:text-gray-200 hover:text-indigo-800 dark:hover:text-white transition-colors duration-300">Contact</a>
-                <a href="#" class="inline-block bg-indigo-800 text-white px-4 py-2 rounded-lg hover:bg-blue-900 transition-colors duration-300">Sign Up</a>
-            </div>
-        </div>
-</header> --}}
 <header
   x-data="{
     navbarOpen:false,
     isSignInOpen:false,
     isSignUpOpen:false,
     sticky:false,
-    init() {
-      // Sticky on scroll
+
+    // THEME
+    isDark:false,
+    applyTheme(){ document.documentElement.classList.toggle('dark', this.isDark); },
+    toggleTheme(){ this.isDark = !this.isDark; localStorage.setItem('theme', this.isDark ? 'dark' : 'light'); this.applyTheme(); },
+
+    // INIT
+    init(){
+      // sticky header
       const onScroll = () => this.sticky = window.scrollY >= 80;
       window.addEventListener('scroll', onScroll);
 
-      // Lock body scroll saat modal/menu terbuka
+      // lock body scroll ketika menu/modal terbuka
       this.$watch('navbarOpen', this.toggleBodyOverflow);
       this.$watch('isSignInOpen', this.toggleBodyOverflow);
       this.$watch('isSignUpOpen', this.toggleBodyOverflow);
+
+      // inisialisasi tema dari localStorage / system
+      const saved = localStorage.getItem('theme');
+      this.isDark = saved ? (saved === 'dark') : window.matchMedia('(prefers-color-scheme: dark)').matches;
+      this.applyTheme();
+
+      // scroll ke anchor jika URL memuat hash saat tiba di home
+      if (location.hash && document.querySelector(location.hash)) {
+        setTimeout(() => this.scrollTo(location.hash), 10);
+      }
+
+      // ikuti perubahan system jika user belum memilih
+      if(!saved){
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e=>{
+          this.isDark = e.matches; this.applyTheme();
+        });
+      }
     },
-    toggleBodyOverflow() {
+
+    toggleBodyOverflow(){
       document.body.style.overflow = (this.navbarOpen || this.isSignInOpen || this.isSignUpOpen) ? 'hidden' : '';
+    },
+
+    // NAV ke section: smooth di halaman sekarang; kalau tidak ada target → pindah ke home#id
+    handleNav(e, href){
+      if (!href || !href.startsWith('#')) return; // link normal
+      const target = document.querySelector(href);
+
+      if (target) {
+        e.preventDefault();
+        this.scrollTo(href);
+        return;
+      }
+
+      // lagi di halaman lain (mis. /project) → redirect ke home + hash
+      window.location.href = '{{ url('/') }}' + href;
+    },
+
+    scrollTo(sel){
+      const t = document.querySelector(sel); if (!t) return;
+      const offset = this.$root.offsetHeight + 12; // tinggi header + sedikit spasi
+      const y = t.getBoundingClientRect().top + window.pageYOffset - offset;
+      window.scrollTo({ top:y, behavior:'smooth' });
+      this.navbarOpen = false;
     }
   }"
-  class="fixed top-0 z-40 w-full pb-5 transition-all duration-300 bg-white"
+  class="fixed top-0 z-40 w-full pb-5 transition-all duration-300 bg-white dark:bg-neutral-900"
   :class="sticky ? 'shadow-lg py-5' : 'shadow-none py-6'"
 >
   @php
-    // Jika tidak di-pass dari controller, kita sediakan default
+    // Menu menuju section di landing
     $headerData = $headerData ?? [
-      ['label' => 'Home', 'href' =>  '/'],
-      ['label' => 'Features', 'href' => '#features'],
-      ['label' => 'Pricing', 'href' => '#pricing'],
-      ['label' => 'About', 'href' => '#about'],
+      ['label' => 'Home',      'href' => '#home'],
+      ['label' => 'Tools',     'href' => '#tools'],
+      ['label' => 'Portfolio', 'href' => '#portfolio'],
+      ['label' => 'Services',  'href' => '#services'],
+      ['label' => 'FAQ',       'href' => '#faq'],
+      ['label' => 'Contact',   'href' => '#contact'],
     ];
   @endphp
 
@@ -70,28 +85,42 @@
     <div class="container mx-auto lg:max-w-screen-xl md:max-w-screen-md flex items-center justify-between px-4">
       {{-- Logo --}}
       <a href="{{ url('/') }}" class="flex items-center gap-2">
-        {{-- Ganti dengan komponen/logo kamu --}}
         <img src="{{ asset('default/logo2.png') }}" alt="Logo" class="h-12 w-auto">
       </a>
 
       {{-- Desktop Nav --}}
       <nav class="hidden lg:flex flex-grow items-center gap-8 justify-center">
         @foreach($headerData as $item)
-          @php
-            $active = url()->current() === $item['href'];
-          @endphp
           <a href="{{ $item['href'] }}"
-             class="text-base font-medium transition
-                    {{ $active ? 'text-primary' : 'text-gray-700 hover:text-primary' }}">
+             @click="handleNav($event, '{{ $item['href'] }}')"
+             class="text-base font-medium text-gray-700 dark:text-gray-200 hover:text-primary transition">
             {{ $item['label'] }}
           </a>
         @endforeach
       </nav>
 
-      {{-- Actions --}}
+      {{-- Actions (desktop) --}}
       <div class="flex items-center gap-4">
+        {{-- Theme toggle --}}
+        <button
+          @click="toggleTheme()"
+          class="hidden md:inline-flex items-center gap-2 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-neutral-800 text-gray-800 dark:text-gray-200 px-4 py-2 shadow-sm hover:bg-primary/10 transition"
+          aria-label="Toggle theme"
+          :title="isDark ? 'Switch to Light' : 'Switch to Dark'">
+          <!-- moon -->
+          <svg x-show="!isDark" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/>
+          </svg>
+          <!-- sun -->
+          <svg x-show="isDark" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M6.76 4.84l-1.8-1.79L3.17 4.84l1.79 1.79 1.8-1.79zm10.48 0l1.79-1.79 1.79 1.79-1.79 1.79-1.79-1.79zM12 5a7 7 0 100 14 7 7 0 000-14zm0-3h-1v3h1V2zm0 20h-1v-3h1v3zM2 11H5v1H2v-1zm17 0h3v1h-3v-1zM4.84 19.16l-1.79 1.79 1.79 1.79 1.79-1.79-1.79-1.79zm14.32 0l1.79 1.79-1.79 1.79-1.79-1.79 1.79-1.79z"/>
+          </svg>
+          <span class="text-sm hidden xl:inline" x-text="isDark ? 'Light' : 'Dark'"></span>
+        </button>
+
+        {{-- CTA Project --}}
         <a href="{{ route('project') }}"
-           class="hidden md:block bg-blue-100 hover:bg-primary text-primary hover:bg-blue-300 text-black px-12 py-3 rounded-full text-lg font-medium transition">
+           class="hidden md:block bg-blue-100 text-black hover:bg-blue-200 px-12 py-3 rounded-full text-lg font-medium transition">
           Project
         </a>
 
@@ -101,14 +130,14 @@
           class="block lg:hidden p-2 rounded-lg"
           aria-label="Toggle mobile menu"
         >
-          <span class="block w-6 h-0.5 bg-black"></span>
-          <span class="block w-6 h-0.5 bg-black mt-1.5"></span>
-          <span class="block w-6 h-0.5 bg-black mt-1.5"></span>
+          <span class="block w-6 h-0.5 bg-black dark:bg-white"></span>
+          <span class="block w-6 h-0.5 bg-black dark:bg-white mt-1.5"></span>
+          <span class="block w-6 h-0.5 bg-black dark:bg-white mt-1.5"></span>
         </button>
       </div>
     </div>
 
-    {{-- Backdrop untuk mobile menu --}}
+    {{-- Backdrop --}}
     <template x-if="navbarOpen">
       <div class="fixed inset-0 bg-black/50 z-40" @click="navbarOpen = false"></div>
     </template>
@@ -122,22 +151,20 @@
     >
       <div class="flex items-center justify-between p-4 relative">
         <a href="{{ url('/') }}" class="flex items-center gap-2">
-          <img src="{{ asset('default/logo.png') }}" alt="Logo" class="h-8 w-auto">
+          <img src="{{ asset('default/logo2.png') }}" alt="Logo" class="h-8 w-auto">
         </a>
         <button
           @click="navbarOpen = false"
           class="w-5 h-5 absolute top-0 right-0 mr-8 mt-8"
           aria-label="Close menu Modal"
-        >
-          ✕
-        </button>
+        >✕</button>
       </div>
 
       <nav class="flex flex-col items-start p-4">
         @foreach($headerData as $item)
           <a href="{{ $item['href'] }}"
-             class="w-full text-left px-3 py-2 rounded-lg mb-1 transition
-                    hover:bg-white/10">
+             @click="handleNav($event, '{{ $item['href'] }}')"
+             class="w-full text-left px-3 py-2 rounded-lg mb-1 transition hover:bg-white/10">
             {{ $item['label'] }}
           </a>
         @endforeach
@@ -148,48 +175,20 @@
             Project
           </a>
         </div>
+
+        {{-- Theme toggle (mobile) --}}
+        <div class="mt-4 w-full px-3">
+          <div class="flex items-center justify-between">
+            <span>Dark mode</span>
+            <button @click="toggleTheme()" class="relative h-7 w-12 rounded-full bg-white/10 transition" aria-label="Toggle theme">
+              <span class="absolute top-0.5 left-0.5 h-6 w-6 rounded-full bg-white transform transition"
+                    :class="isDark ? 'translate-x-5' : ''"></span>
+            </button>
+          </div>
+        </div>
       </nav>
     </div>
   </div>
-
-  {{-- Modal Sign In --}}
-  <template x-if="isSignInOpen">
-    <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-         @keydown.escape.window="isSignInOpen = false">
-      <div
-        class="relative mx-auto w-full max-w-md overflow-hidden rounded-lg px-8 pt-14 pb-8 text-center bg-white"
-        @click.outside="isSignInOpen = false"
-        x-trap.noscroll="isSignInOpen"
-      >
-        <button
-          @click="isSignInOpen = false"
-          class="absolute top-0 right-0 mr-8 mt-8"
-          aria-label="Close Sign In Modal"
-        >✕</button>
-
-        {{-- Ganti dengan partial/form kamu --}}
-        @includeIf('auth.signin')
-      </div>
-    </div>
-  </template>
-
-  <template x-if="isSignUpOpen">
-    <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-         @keydown.escape.window="isSignUpOpen = false">
-      <div
-        class="relative mx-auto w-full max-w-md overflow-hidden rounded-lg bg-white backdrop-blur-md px-8 pt-14 pb-8 text-center"
-        @click.outside="isSignUpOpen = false"
-        x-trap.noscroll="isSignUpOpen"
-      >
-        <button
-          @click="isSignUpOpen = false"
-          class="absolute top-0 right-0 mr-8 mt-8"
-          aria-label="Close Sign Up Modal"
-        >✕</button>
-
-        {{-- Ganti dengan partial/form kamu --}}
-        @includeIf('auth.signup')
-      </div>
-    </div>
-  </template>
 </header>
+
+<style>html{scroll-behavior:smooth}</style>
