@@ -31,7 +31,15 @@ class PortofolioForm
                     ->maxFiles(1) 
                     ->disk('public')              
                     ->directory('tumbnail')   
-                    ->visibility('public'),
+                    ->visibility('public')
+                    ->imageResizeMode('cover')            
+                    ->imageResizeTargetWidth(768)           
+                    ->imageResizeTargetHeight(480)
+                    ->rules([
+                        'mimes:jpg,jpeg,png,webp',
+                        'max:2048',                    
+                        'dimensions:ratio=16/10,min_width=700,min_height=440',
+                    ]),
                 FileUpload::make('image')
                     ->label('Gambar')
                     ->image()
@@ -41,6 +49,7 @@ class PortofolioForm
                     ->disk('public')              
                     ->directory('portofolio')   
                     ->visibility('public')
+                    ->imageEditor()    
             ]);
     }
 }

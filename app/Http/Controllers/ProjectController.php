@@ -10,7 +10,7 @@ class ProjectController extends Controller
     public function index()
     {
         $portos = Portofolio::query()
-            ->select('id','name','image','create_date','description')
+            ->select('id','name','image', 'tumbnail','create_date','description')
             ->orderByRaw('COALESCE(create_date, created_at, id) DESC')
             ->paginate(9);
 

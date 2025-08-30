@@ -25,7 +25,7 @@ class PortofoliosTable
                     ->limitedRemainingText(),
                 TextColumn::make('date_create')
                     ->label('Tanggal Buat')
-                    ->date('M j, Y')
+                    ->date('M, j, Y')
 
             ])
             ->filters([
