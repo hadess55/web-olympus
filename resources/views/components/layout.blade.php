@@ -6,17 +6,7 @@
 
   <title>{{ config('app.name', 'Olympus Project') }}</title>
 
-  {{-- 1) BOOT THEME LEBIH DULU: pasang class `dark` SEBELUM CSS agar tidak FOUC --}}
-  <script>
-    (function () {
-    const saved = localStorage.getItem('theme');
-    if (saved === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  })();
-  </script>
+
 
   {{-- Fonts (opsional) --}}
   <link rel="preconnect" href="https://fonts.bunny.net">
@@ -31,8 +21,8 @@
   @vite(['resources/css/app.css','resources/js/app.js'])
 </head>
 
-{{-- beri default warna berdasarkan token --}}
-<body class="antialiased bg-bg text-text">
+<body class="antialiased overflow-x-hidden">
+
   <x-navbar />
 
   <main class="pt-18">

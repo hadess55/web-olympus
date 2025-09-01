@@ -7,9 +7,9 @@
     <x-home.faq :faqs="$faqs"/>
     <x-home.contact
     address="925 Filbert Street Pennsylvania 18072"
-    email="info@gmail.com"
-    phone="+45 3411-4411"
-    whatsapp="+6281234567890"
+    email="olympusproject5@gmail.com"
+    phone="+62 8594 7582 570"
+    whatsapp="+6285947582570"
     />
 
 </x-layout>

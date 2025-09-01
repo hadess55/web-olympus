@@ -17,19 +17,26 @@
   ];
 
   $social = $social ?? [
-    ['icon' => 'tabler:brand-facebook',  'href' => '#'],
-    ['icon' => 'tabler:brand-twitter',   'href' => '#'],
-    ['icon' => 'tabler:brand-instagram', 'href' => '#'],
+    ['icon' => 'tabler:brand-facebook',  'href' => '#', 'label' => 'Facebook'],
+    ['icon' => 'tabler:brand-twitter',   'href' => '#', 'label' => 'Twitter/X'],
+    ['icon' => 'tabler:brand-instagram', 'href' => '#', 'label' => 'Instagram'],
   ];
 
-  $address = $address ?? '925 Filbert Street Pennsylvania 18072';
+  $address = $address ?? null; // opsional
   $phone   = $phone   ?? '+45 3411-4411';
   $email   = $email   ?? 'info@gmail.com';
   $year    = now()->year;
 @endphp
 
-<footer class="bg-blue-100 dark:bg-neutral-900 py-10">
-  <div class="container mx-auto lg:max-w-screen-xl md:max-w-screen-md px-4">
+<footer class="relative overflow-hidden py-12 bg-white">
+  {{-- Aksen lembut di background --}}
+  {{-- <div class="pointer-events-none absolute inset-0">
+    <div class="absolute -top-16 -left-16 h-56 w-56 rounded-full bg-blue-300/25 blur-3xl"></div>
+    <div class="absolute -bottom-20 -right-12 h-64 w-64 rounded-full bg-indigo-300/25 blur-3xl"></div>
+    <div class="absolute inset-0 opacity-50 [background-image:repeating-linear-gradient(45deg,transparent_0_12px,rgba(255,255,255,.6)_12px_13px)]"></div>
+  </div> --}}
+
+  <div class="relative container mx-auto lg:max-w-screen-xl md:max-w-screen-md px-4">
     <div class="grid grid-cols-1 gap-y-10 gap-x-16 sm:grid-cols-2 lg:grid-cols-12 xl:gap-x-8">
       {{-- Logo + Sosial --}}
       <div class="col-span-4 md:col-span-12 lg:col-span-4">
@@ -41,11 +48,12 @@
           </a>
         @endif
 
-        <div class="flex items-center gap-4 mt-4">
+        <div class="mt-4 flex items-center gap-4">
           @foreach($social as $s)
             <a href="{{ $s['href'] }}" target="_blank" rel="noopener"
-               class="text-3xl text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">
-              <iconify-icon icon="{{ $s['icon'] }}"></iconify-icon>
+               aria-label="{{ $s['label'] ?? 'Social' }}"
+               class="group text-3xl text-slate-600 hover:text-primary transition-colors">
+              <iconify-icon icon="{{ $s['icon'] }}" class="transition-transform group-hover:-translate-y-0.5"></iconify-icon>
             </a>
           @endforeach
         </div>
@@ -53,11 +61,14 @@
 
       {{-- Links dari headerData --}}
       <div class="col-span-2">
-        <h3 class="mb-4 text-2xl font-medium text-gray-900 dark:text-gray-100">Links</h3>
+        <h3 class="mb-4 text-2xl font-semibold text-slate-900">Links</h3>
         <ul>
           @foreach($headerData as $item)
-            <li class="mb-2 w-fit text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">
-              <a href="{{ $item['href'] }}">{{ $item['label'] }}</a>
+            <li class="mb-2 w-fit">
+              <a href="{{ $item['href'] }}"
+                 class="text-slate-600 hover:text-primary transition-colors">
+                {{ $item['label'] }}
+              </a>
             </li>
           @endforeach
         </ul>
@@ -65,11 +76,14 @@
 
       {{-- Other --}}
       <div class="col-span-2">
-        <h3 class="mb-4 text-2xl font-medium text-gray-900 dark:text-gray-100">Other</h3>
+        <h3 class="mb-4 text-2xl font-semibold text-slate-900">Other</h3>
         <ul>
           @foreach($otherLinks as $link)
-            <li class="mb-2 w-fit text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">
-              <a href="{{ $link['href'] }}">{{ $link['label'] }}</a>
+            <li class="mb-2 w-fit">
+              <a href="{{ $link['href'] }}"
+                 class="text-slate-600 hover:text-primary transition-colors">
+                {{ $link['label'] }}
+              </a>
             </li>
           @endforeach
         </ul>
@@ -77,41 +91,40 @@
 
       {{-- Kontak --}}
       <div class="col-span-4 md:col-span-4 lg:col-span-4">
-        <div class="flex items-center gap-2">
-          <iconify-icon icon="tabler:brand-google-maps" class="text-primary text-3xl"></iconify-icon>
-          <h5 class="text-lg text-gray-700 dark:text-gray-300">{{ $address }}</h5>
-        </div>
-        <div class="flex items-center gap-2 mt-10">
+        @if ($address)
+          <div class="flex items-start gap-2">
+            <iconify-icon icon="tabler:map-pin" class="text-primary text-3xl"></iconify-icon>
+            <p class="text-lg text-slate-700">{{ $address }}</p>
+          </div>
+        @endif
+        <div class="mt-8 flex items-center gap-2">
           <iconify-icon icon="tabler:phone" class="text-primary text-3xl"></iconify-icon>
-          <h5 class="text-lg text-gray-700 dark:text-gray-300">{{ $phone }}</h5>
+          <p class="text-lg text-slate-700">{{ $phone }}</p>
         </div>
-        <div class="flex items-center gap-2 mt-10">
-          <iconify-icon icon="tabler:folder" class="text-primary text-3xl"></iconify-icon>
-          <h5 class="text-lg text-gray-700 dark:text-gray-300">{{ $email }}</h5>
+        <div class="mt-8 flex items-center gap-2">
+          <iconify-icon icon="tabler:mail" class="text-primary text-3xl"></iconify-icon>
+          <p class="text-lg text-slate-700">{{ $email }}</p>
         </div>
       </div>
     </div>
 
-    <div class="mt-10 lg:flex items-center justify-between">
-      <h4 class="text-sm font-normal text-gray-500 dark:text-gray-400 text-center lg:text-start">
+    {{-- Bottom bar --}}
+    <div class="relative mt-10 border-t border-white/70 pt-6 lg:flex items-center justify-between">
+      <h4 class="text-sm font-normal text-slate-600 text-center lg:text-start">
         © {{ $year }} Agency. All Rights Reserved by
-        <a href="https://getnextjstemplates.com/" target="_blank" rel="noopener"
-           class="hover:text-primary">GetNextJsTemplates.com</a>
+        <a href="https://getnextjstemplates.com/" target="_blank" rel="noopener" class="font-medium text-primary hover:underline">
+          GetNextJsTemplates.com
+        </a>
       </h4>
 
-      <div class="flex gap-5 mt-5 lg:mt-0 justify-center lg:justify-start">
-        <a href="{{ url('/privacy') }}" class="text-sm font-normal text-gray-500 dark:text-gray-400 hover:text-primary transition-colors">
+      <div class="mt-5 lg:mt-0 flex gap-5 justify-center lg:justify-start">
+        <a href="{{ url('/privacy') }}" class="text-sm font-normal text-slate-600 hover:text-primary transition-colors">
           Privacy policy
         </a>
-        <a href="{{ url('/terms') }}" class="text-sm font-normal text-gray-500 dark:text-gray-400 hover:text-primary transition-colors">
+        <a href="{{ url('/terms') }}" class="text-sm font-normal text-slate-600 hover:text-primary transition-colors">
           Terms &amp; conditions
         </a>
       </div>
-
-      <h4 class="text-sm font-normal text-gray-500 dark:text-gray-400 text-center lg:text-start">
-        Distributed by
-        <a href="https://themewagon.com/" target="_blank" rel="noopener" class="hover:text-primary">ThemeWagon</a>
-      </h4>
     </div>
   </div>
 </footer>

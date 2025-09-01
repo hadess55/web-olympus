@@ -4,30 +4,3 @@
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
 @source '../**/*.js';
-
-@theme {
-    --color-primary: 248 63% 58%; /* indigo */
-    --color-accent: 43 96% 56%; /* gold */
-
-    --color-bg: 220 20% 98%;
-    --color-surface: 0 0% 100%;
-    --color-text: 222 47% 11%;
-    --color-muted: 215 16% 47%;
-    --color-border: 214 32% 91%;
-}
-
-/* Design tokens (DARK) – aktif saat root punya class .dark */
-@theme .dark {
-    --color-primary: 243 75% 75%;
-    --color-accent: 43 97% 60%;
-
-    --color-bg: 222 47% 11%;
-    --color-surface: 216 28% 17%;
-    --color-text: 210 40% 96%;
-    --color-muted: 215 16% 72%;
-    --color-border: 215 27% 26%;
-}
-body {
-    background-color: hsl(var(--color-bg));
-    color: hsl(var(--color-text));
-}
