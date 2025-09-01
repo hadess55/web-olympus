@@ -25,6 +25,14 @@ class Portofolio extends Model
             'create_date' => 'datetime',
         ];
     }
+
+    protected $appends = ['slug'];
+
+    public function getSlugAttribute(): string
+    {
+        return Str::slug($this->name ?? '');
+    }
+       
     public function getCoverUrlAttribute(): string
     {
         $thumb = $this->thumbnail
