@@ -3,28 +3,23 @@
   // Data default (bisa di-override saat include)
   $headerData = $headerData ?? [
     ['label' => 'Home',     'href' => (\Illuminate\Support\Facades\Route::has('home') ? route('home') : url('/'))],
-    ['label' => 'Features', 'href' => '#features'],
-    ['label' => 'Pricing',  'href' => '#pricing'],
-    ['label' => 'About',    'href' => '#about'],
+    ['label' => 'Tools', 'href' => '#tools'],
+    ['label' => 'Services',    'href' => '#services'],
+    ['label' => 'FAQ',    'href' => '#faq'],
+    ['label' => 'Contact',    'href' => '#contact'],
   ];
 
   $otherLinks = $otherLinks ?? [
-    ['label' => 'About Us', 'href' => '#'],
-    ['label' => 'Our Team', 'href' => '#'],
-    ['label' => 'Career',   'href' => '#'],
-    ['label' => 'Services', 'href' => '#'],
-    ['label' => 'Contact',  'href' => '#'],
+    ['label' => 'Project', 'href' => '/project'],
   ];
 
   $social = $social ?? [
-    ['icon' => 'tabler:brand-facebook',  'href' => '#', 'label' => 'Facebook'],
-    ['icon' => 'tabler:brand-twitter',   'href' => '#', 'label' => 'Twitter/X'],
-    ['icon' => 'tabler:brand-instagram', 'href' => '#', 'label' => 'Instagram'],
+    ['icon' => 'tabler:brand-instagram', 'href' => 'https://www.instagram.com/olympusproject5', 'label' => 'Instagram'],
   ];
 
   $address = $address ?? null; // opsional
-  $phone   = $phone   ?? '+45 3411-4411';
-  $email   = $email   ?? 'info@gmail.com';
+  $phone   = $phone   ?? '+62 8594 7582 570';
+  $email   = $email   ?? 'olympusproject5@gmail.com';
   $year    = now()->year;
 @endphp
 
@@ -76,7 +71,7 @@
 
       {{-- Other --}}
       <div class="col-span-2">
-        <h3 class="mb-4 text-2xl font-semibold text-slate-900">Other</h3>
+        <h3 class="mb-4 text-2xl font-semibold text-slate-900">Project</h3>
         <ul>
           @foreach($otherLinks as $link)
             <li class="mb-2 w-fit">
@@ -109,21 +104,13 @@
     </div>
 
     {{-- Bottom bar --}}
-    <div class="relative mt-10 border-t border-white/70 pt-6 lg:flex items-center justify-between">
+    <div class="relative mt-10 border-t border-white/70 pt-6 lg:flex items-center justify-center">
       <h4 class="text-sm font-normal text-slate-600 text-center lg:text-start">
-        © {{ $year }} Agency. All Rights Reserved by
-        <a href="https://getnextjstemplates.com/" target="_blank" rel="noopener" class="font-medium text-primary hover:underline">
-          GetNextJsTemplates.com
+        © {{ $year }} All Rights Reserved by
+        <a href="https://olympusprojct.com" target="_blank" rel="noopener" class="font-medium text-primary hover:underline">
+          OlympusProject
         </a>
       </h4>
-
-      <div class="mt-5 lg:mt-0 flex gap-5 justify-center lg:justify-start">
-        <a href="{{ url('/privacy') }}" class="text-sm font-normal text-slate-600 hover:text-primary transition-colors">
-          Privacy policy
-        </a>
-        <a href="{{ url('/terms') }}" class="text-sm font-normal text-slate-600 hover:text-primary transition-colors">
-          Terms &amp; conditions
-        </a>
       </div>
     </div>
   </div>
