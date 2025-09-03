@@ -13,7 +13,9 @@ class Portofolio extends Model
     protected $fillable = [
         'name',
         'tumbnail',
+        'slug',
         'image',
+        'technologies',
         'create_date',
         'description',
     ];
@@ -21,17 +23,18 @@ class Portofolio extends Model
      protected function casts(): array
     { 
         return [
+            'technologies' => 'array',
             'image' => 'array',
             'create_date' => 'datetime',
         ];
     }
 
-    protected $appends = ['slug'];
 
-    public function getSlugAttribute(): string
+    public function getRouteKeyName()
     {
-        return Str::slug($this->name ?? '');
+        return 'slug';
     }
+
        
     public function getCoverUrlAttribute(): string
     {

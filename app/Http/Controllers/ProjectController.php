@@ -12,51 +12,108 @@ class ProjectController extends Controller
     public function index()
     {
         $portos = Portofolio::query()
-            ->select('id','name','image', 'tumbnail','create_date','description')
+            ->select('id','name','image','slug','tumbnail','create_date','description','technologies')
             ->orderByRaw('COALESCE(create_date, created_at, id) DESC')
-            ->paginate(9);
+            ->paginate(9)
+            ->through(function ($p) {
+                // pastikan selalu array (handle JSON cast / string "a,b,c" / null)
+                if (is_string($p->technologies)) {
+                    $p->technologies = array_values(array_filter(array_map('trim', explode(',', $p->technologies))));
+                } elseif (!is_array($p->technologies)) {
+                    $p->technologies = [];
+                }
+                return $p;
+            });
 
         return view('portofolio', compact('portos'));
     }
     // app/Http/Controllers/ProjectController.php
 
+    // public function show($id)
+    // {
+    //     $portofolio = Portofolio::findOrFail($id);
+
+    //     // Cover dari thumbnail (handle berbagai ejaan)
+    //     $thumb = $portofolio->tumbnail
+    //         ?? $portofolio->tumbnail   // kalau ada yang typo
+    //         ?? $portofolio->thumbnail
+    //         ?? null;
+
+    //     $coverUrl = $thumb
+    //         ? Storage::url($thumb)
+    //         : asset('default/Baner.png');
+
+    //     // Gallery (json/array)
+    //     $gallery = [];
+    //     if ($portofolio->image) {
+    //         $raw = is_array($portofolio->image) ? $portofolio->image : json_decode($portofolio->image, true);
+    //         if (json_last_error() === JSON_ERROR_NONE && is_array($raw)) {
+    //             $gallery = collect($raw)->filter()->map(fn($p) => Storage::url($p))->values()->all();
+    //         }
+    //     }
+
+    //     // Tanggal
+    //     $dateText = null;
+    //     if (!empty($portofolio->create_date)) {
+    //         try { $dateText = Carbon::parse($portofolio->create_date)->translatedFormat('d M Y'); } catch (\Exception $e) {}
+    //     }
+
+    //     // >>> Perbaikan di sini: jangan sebutkan kolom yang tidak pasti ada
+    //     $others = Portofolio::where('id', '!=', $portofolio->id)
+    //         ->orderByDesc('create_date')
+    //         ->take(6)
+    //         ->get(); // ambil semua kolom, aman untuk berbagai ejaan
+
+    //     return view('show', compact('portofolio','coverUrl','gallery','dateText','others'));
+    // }
     public function show($id)
-    {
-        $portofolio = Portofolio::findOrFail($id);
+{
+    // GANTI BARIS INI SAJA:
+    // $portofolio = Portofolio::findOrFail($id);
+    $portofolio = Portofolio::where('slug', $id)
+        ->when(is_numeric($id), fn ($q) => $q->orWhere('id', $id))
+        ->firstOrFail();
 
-        // Cover dari thumbnail (handle berbagai ejaan)
-        $thumb = $portofolio->tumbnail
-            ?? $portofolio->tumbnail   // kalau ada yang typo
-            ?? $portofolio->thumbnail
-            ?? null;
+    // ...sisanya BIARKAN seperti punyamu
+    $thumb = $portofolio->tumbnail
+        ?? $portofolio->tumbnail
+        ?? $portofolio->thumbnail
+        ?? null;
 
-        $coverUrl = $thumb
-            ? Storage::url($thumb)
-            : asset('images/placeholder.webp');
+    $coverUrl = $thumb ? Storage::url($thumb) : asset('default/Baner.png');
 
-        // Gallery (json/array)
-        $gallery = [];
-        if ($portofolio->image) {
-            $raw = is_array($portofolio->image) ? $portofolio->image : json_decode($portofolio->image, true);
-            if (json_last_error() === JSON_ERROR_NONE && is_array($raw)) {
-                $gallery = collect($raw)->filter()->map(fn($p) => Storage::url($p))->values()->all();
-            }
+    $gallery = [];
+    if ($portofolio->image) {
+        $raw = is_array($portofolio->image) ? $portofolio->image : json_decode($portofolio->image, true);
+        if (json_last_error() === JSON_ERROR_NONE && is_array($raw)) {
+            $gallery = collect($raw)->filter()->map(fn($p) => Storage::url($p))->values()->all();
         }
-
-        // Tanggal
-        $dateText = null;
-        if (!empty($portofolio->create_date)) {
-            try { $dateText = Carbon::parse($portofolio->create_date)->translatedFormat('d M Y'); } catch (\Exception $e) {}
-        }
-
-        // >>> Perbaikan di sini: jangan sebutkan kolom yang tidak pasti ada
-        $others = Portofolio::where('id', '!=', $portofolio->id)
-            ->orderByDesc('create_date')
-            ->take(6)
-            ->get(); // ambil semua kolom, aman untuk berbagai ejaan
-
-        return view('show', compact('portofolio','coverUrl','gallery','dateText','others'));
     }
+
+    $dateText = null;
+    if (!empty($portofolio->create_date)) {
+        try { $dateText = Carbon::parse($portofolio->create_date)->translatedFormat('d M Y'); } catch (\Exception $e) {}
+    }
+
+    $others = Portofolio::where('id', '!=', $portofolio->id)
+        ->orderByDesc('create_date')
+        ->take(6)
+        ->get();
+
+    $technologies = collect(
+        is_array($portofolio->technologies)
+            ? $portofolio->technologies
+            : (json_decode($portofolio->technologies ?? '[]', true)
+                ?: (is_string($portofolio->technologies ?? null)
+                    ? explode(',', $portofolio->technologies) : []))
+    )
+    ->map(fn ($t) => strtolower(trim($t)))
+    ->filter()
+    ->values()
+    ->all();
+
+    return view('show', compact('portofolio','coverUrl','gallery','dateText','others','technologies'));
+}
 
 
     /* =======================

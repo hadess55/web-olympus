@@ -56,7 +56,7 @@
     $headerData = $headerData ?? [
       ['label' => 'Home',      'href' => '#home'],
       ['label' => 'Tools',     'href' => '#tools'],
-      ['label' => 'Portfolio', 'href' => '#portfolio'],
+      ['label' => 'Project', 'href' => '#portfolio'],
       ['label' => 'Services',  'href' => '#services'],
       ['label' => 'FAQ',       'href' => '#faq'],
       ['label' => 'Contact',   'href' => '#contact'],

@@ -1,3 +1,16 @@
+@php
+  $techMap = [
+    'tailwind'  => ['label' => 'Tailwind CSS',     'icon' => 'tailwind',  'class' => 'bg-[#E0F2FE] text-[#0EA5E9] ring-[#BAE6FD]'],
+    'bootstrap' => ['label' => 'Bootstrap',        'icon' => 'bootstrap', 'class' => 'bg-[#EFE2FF] text-[#7C3AED] ring-[#E9D5FF]'],
+    'react'     => ['label' => 'React',            'icon' => 'react',     'class' => 'bg-[#E8F9FF] text-[#06B6D4] ring-[#CFFAFE]'],
+    'flutter'   => ['label' => 'Flutter',          'icon' => 'flutter',   'class' => 'bg-[#E6F1FF] text-[#1E88E5] ring-[#C7E0FF]'],
+    'wordpress' => ['label' => 'WordPress',        'icon' => 'wordpress', 'class' => 'bg-[#E9F2FF] text-[#1A76B8] ring-[#CDE2FA]'],
+    'alpine'    => ['label' => 'Alpine.js',        'icon' => 'alpine',    'class' => 'bg-[#E8EDFF] text-[#1C3FAA] ring-[#D5DEFF]'],
+    'laravel'   => ['label' => 'Laravel',          'icon' => 'laravel',   'class' => 'bg-[#FEE2E2] text-[#E11D48] ring-[#FECACA]'],
+    'javascript' => ['label' => 'JavaScript',      'icon'  => 'javascript','class' => 'bg-[#FFF9C4] text-[#000000] ring-[#F7DF1E]',],
+    'nextjs'    => ['label' => 'Next.js',          'icon' => 'nextjs',    'class' => 'bg-gray-100 text-gray-900 ring-gray-200'],
+  ];
+@endphp
 <x-layout>
   <section class="bg-gray-50 py-10">
     <div class="container mx-auto lg:max-w-screen-xl md:max-w-screen-md px-4">
@@ -41,6 +54,22 @@
           <h1 class="mt-5 text-2xl md:text-3xl font-semibold text-gray-900">
             {{ $portofolio->name }}
           </h1>
+
+         @if(!empty($technologies))
+          <div class="mt-5 flex flex-wrap gap-2">
+            @foreach($technologies as $key)
+              @php
+                $m = $techMap[$key] ?? ['label' => ucfirst($key), 'icon' => null, 'class' => 'bg-gray-100 text-gray-700 ring-gray-200'];
+              @endphp
+              <span class="inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-sm font-medium ring-1 ring-inset {{ $m['class'] }}">
+                @if($m['icon'])
+                  <img src="{{ asset('tech-icons/'.$m['icon'].'.svg') }}" alt="{{ $m['label'] }}" class="h-3.5 w-3.5">
+                @endif
+                {{ $m['label'] }}
+              </span>
+            @endforeach
+          </div>
+        @endif
 
           {{-- GALERI (thumbnail -> popup, tidak pindah halaman) --}}
           @if(!empty($gallery) && count($gallery))

@@ -17,15 +17,9 @@ class PortofoliosTable
             ->columns([
                 TextColumn::make('name')
                         ->label('Project'),
-                ImageColumn::make('image')
-                    ->label('Gambar')
-                    ->circular()
-                    ->stacked()
-                    ->limit(2)
-                    ->limitedRemainingText(),
-                TextColumn::make('date_create')
+                TextColumn::make('create_date') 
                     ->label('Tanggal Buat')
-                    ->date('M, j, Y')
+                    ->date('j M, Y')
 
             ])
             ->filters([
