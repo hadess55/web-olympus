@@ -27,7 +27,7 @@ class HomeController extends Controller
             ['q'=>'Bagaimana alur kerja?', 'a'=>'Kickoff → desain → sprint dev → UAT → rilis → support.'],
         ];
 
-        $portos = Portofolio::orderByRaw('COALESCE(create_date, created_at, id) DESC')->take(12)->get();
+        $portos = Portofolio::orderByRaw('COALESCE(create_date, created_at, id) DESC')->take(6)->get();
         return view('welcome', compact('portos', 'services', 'faqs'));
 
     }

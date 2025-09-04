@@ -55,6 +55,6 @@ class Portofolio extends Model
 
     public function getExcerptAttribute(): string
     {
-        return Str::limit(strip_tags($this->description ?? ''), 160);
+        return Str::limit(strip_tags($this->description ?? ''), 100);
     }
 }

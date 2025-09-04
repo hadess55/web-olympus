@@ -56,8 +56,8 @@
     $headerData = $headerData ?? [
       ['label' => 'Home',      'href' => '#home'],
       ['label' => 'Tools',     'href' => '#tools'],
-      ['label' => 'Project', 'href' => '#portfolio'],
       ['label' => 'Services',  'href' => '#services'],
+      ['label' => 'Projects', 'href' => '#portfolio'],
       ['label' => 'FAQ',       'href' => '#faq'],
       ['label' => 'Contact',   'href' => '#contact'],
     ];
@@ -86,7 +86,7 @@
         {{-- CTA Project --}}
         <a href="{{ function_exists('route') && Route::has('project') ? route('project') : url('/project') }}"
            class="hidden md:block bg-indigo-500 text-white hover:bg-indigo-600 px-12 py-3 rounded-full text-lg font-medium transition">
-          Project
+          Projects
         </a>
 
         {{-- Hamburger --}}
@@ -137,7 +137,7 @@
         <div class="mt-4 flex flex-col space-y-4 w-full">
           <a href="{{ function_exists('route') && Route::has('project') ? route('project') : url('/project') }}"
              class="border border-primary text-primary px-4 py-2 rounded-lg text-center hover:bg-blue-50 transition">
-            Project
+            Projects
           </a>
         </div>
       </nav>

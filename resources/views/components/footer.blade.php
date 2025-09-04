@@ -1,12 +1,12 @@
 {{-- resources/views/components/footer.blade.php --}}
 @php
-  // Data default (bisa di-override saat include)
+  // ====== Default props (bisa dioverride saat include) ======
   $headerData = $headerData ?? [
-    ['label' => 'Home',     'href' => (\Illuminate\Support\Facades\Route::has('home') ? route('home') : url('/'))],
-    ['label' => 'Tools', 'href' => '#tools'],
-    ['label' => 'Services',    'href' => '#services'],
-    ['label' => 'FAQ',    'href' => '#faq'],
-    ['label' => 'Contact',    'href' => '#contact'],
+    ['label' => 'Home',    'href' => (\Illuminate\Support\Facades\Route::has('home') ? route('home') : url('/'))],
+    ['label' => 'Tools',   'href' => '#tools'],
+    ['label' => 'Services','href' => '#services'],
+    ['label' => 'FAQ',     'href' => '#faq'],
+    ['label' => 'Contact', 'href' => '#contact'],
   ];
 
   $otherLinks = $otherLinks ?? [
@@ -17,51 +17,56 @@
     ['icon' => 'tabler:brand-instagram', 'href' => 'https://www.instagram.com/olympusproject5', 'label' => 'Instagram'],
   ];
 
-  $address = $address ?? null; // opsional
+  $address = $address ?? null;
   $phone   = $phone   ?? '+62 8594 7582 570';
   $email   = $email   ?? 'olympusproject5@gmail.com';
   $year    = now()->year;
 @endphp
 
-<footer class="relative overflow-hidden py-12 bg-white">
-  {{-- Aksen lembut di background --}}
-  {{-- <div class="pointer-events-none absolute inset-0">
-    <div class="absolute -top-16 -left-16 h-56 w-56 rounded-full bg-blue-300/25 blur-3xl"></div>
-    <div class="absolute -bottom-20 -right-12 h-64 w-64 rounded-full bg-indigo-300/25 blur-3xl"></div>
-    <div class="absolute inset-0 opacity-50 [background-image:repeating-linear-gradient(45deg,transparent_0_12px,rgba(255,255,255,.6)_12px_13px)]"></div>
-  </div> --}}
+<footer class="relative isolate overflow-hidden">
+  {{-- Background dekoratif + gradient halus (tema indigo) --}}
+  <div class="pointer-events-none absolute inset-0 bg-gradient-to-b from-white to-indigo-200"></div>
 
-  <div class="relative container mx-auto lg:max-w-screen-xl md:max-w-screen-md px-4">
-    <div class="grid grid-cols-1 gap-y-10 gap-x-16 sm:grid-cols-2 lg:grid-cols-12 xl:gap-x-8">
-      {{-- Logo + Sosial --}}
-      <div class="col-span-4 md:col-span-12 lg:col-span-4">
-        @if (View::exists('components.logo'))
-          @include('components.logo')
-        @else
-          <a href="{{ url('/') }}" class="inline-flex items-center gap-2 mb-4">
-            <img src="{{ asset('default/logo2.png') }}" alt="Logo" class="h-12 w-auto">
-          </a>
-        @endif
+  <div class="relative container mx-auto px-4 py-16 lg:py-20 lg:max-w-screen-xl">
+    {{-- GRID UTAMA --}}
+    <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-12">
+      {{-- Brand + Sosial --}}
+      <div class="lg:col-span-4 md:col-span-3">
+        <a href="{{ url('/') }}" class="inline-flex items-center gap-3 group">
+          <img src="{{ asset('default/logo2.png') }}" alt="OlympusProject"
+               class="h-12 w-auto rounded-xl ring-1 ring-indigo-100 transition-transform group-hover:scale-[1.02]">
+          <span class="sr-only">OlympusProject</span>
+        </a>
 
-        <div class="mt-4 flex items-center gap-4">
+        <p class="mt-4 text-slate-600 leading-relaxed">
+          Bangun produk digital yang estetik, cepat, dan efektif bersama OlympusProject.
+        </p>
+
+        <div class="mt-6 flex items-center gap-3">
           @foreach($social as $s)
-            <a href="{{ $s['href'] }}" target="_blank" rel="noopener"
-               aria-label="{{ $s['label'] ?? 'Social' }}"
-               class="group text-3xl text-slate-600 hover:text-primary transition-colors">
-              <iconify-icon icon="{{ $s['icon'] }}" class="transition-transform group-hover:-translate-y-0.5"></iconify-icon>
+            <a
+              href="{{ $s['href'] }}"
+              target="_blank" rel="noopener"
+              aria-label="{{ $s['label'] ?? 'Social' }}"
+              class="inline-flex h-10 w-10 items-center justify-center rounded-full ring-1 ring-indigo-100 bg-white
+                     hover:ring-indigo-300 hover:shadow-md hover:-translate-y-0.5 transition-all"
+            >
+              <iconify-icon icon="{{ $s['icon'] }}" class="text-xl text-slate-700"></iconify-icon>
             </a>
           @endforeach
         </div>
       </div>
 
-      {{-- Links dari headerData --}}
-      <div class="col-span-2">
-        <h3 class="mb-4 text-2xl font-semibold text-slate-900">Links</h3>
-        <ul>
+      {{-- Links --}}
+      <div class="lg:col-span-3 sm:col-span-1">
+        <h3 class="mb-4 text-xl font-semibold text-slate-900">Links</h3>
+        <ul class="space-y-2">
           @foreach($headerData as $item)
-            <li class="mb-2 w-fit">
+            <li>
               <a href="{{ $item['href'] }}"
-                 class="text-slate-600 hover:text-primary transition-colors">
+                 class="group inline-flex items-center gap-2 text-slate-600 hover:text-indigo-600
+                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300 rounded transition-colors">
+                <span class="h-1.5 w-1.5 rounded-full bg-slate-300 group-hover:bg-indigo-600 transition-colors"></span>
                 {{ $item['label'] }}
               </a>
             </li>
@@ -69,14 +74,15 @@
         </ul>
       </div>
 
-      {{-- Other --}}
-      <div class="col-span-2">
-        <h3 class="mb-4 text-2xl font-semibold text-slate-900">Project</h3>
-        <ul>
+      {{-- Project / Others --}}
+      <div class="lg:col-span-2 sm:col-span-1">
+        <h3 class="mb-4 text-xl font-semibold text-slate-900">Project</h3>
+        <ul class="space-y-2">
           @foreach($otherLinks as $link)
-            <li class="mb-2 w-fit">
+            <li>
               <a href="{{ $link['href'] }}"
-                 class="text-slate-600 hover:text-primary transition-colors">
+                 class="inline-block text-slate-600 hover:text-indigo-600 transition-colors
+                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300 rounded">
                 {{ $link['label'] }}
               </a>
             </li>
@@ -85,33 +91,51 @@
       </div>
 
       {{-- Kontak --}}
-      <div class="col-span-4 md:col-span-4 lg:col-span-4">
+      <div class="lg:col-span-3 md:col-span-2">
+        <h3 class="mb-4 text-xl font-semibold text-slate-900">Contact</h3>
+
         @if ($address)
-          <div class="flex items-start gap-2">
-            <iconify-icon icon="tabler:map-pin" class="text-primary text-3xl"></iconify-icon>
-            <p class="text-lg text-slate-700">{{ $address }}</p>
+          <div class="mb-5 flex items-start gap-3">
+            <iconify-icon icon="tabler:map-pin" class="text-indigo-600 text-2xl"></iconify-icon>
+            <p class="text-slate-700">{{ $address }}</p>
           </div>
         @endif
-        <div class="mt-8 flex items-center gap-2">
-          <iconify-icon icon="tabler:phone" class="text-primary text-3xl"></iconify-icon>
-          <p class="text-lg text-slate-700">{{ $phone }}</p>
+
+        <div class="mb-4 flex items-center gap-3">
+          <iconify-icon icon="tabler:phone" class="text-indigo-600 text-2xl"></iconify-icon>
+          <a href="tel:{{ preg_replace('/\s+/', '', $phone) }}"
+             class="text-slate-700 hover:text-indigo-600 transition-colors">
+            {{ $phone }}
+          </a>
         </div>
-        <div class="mt-8 flex items-center gap-2">
-          <iconify-icon icon="tabler:mail" class="text-primary text-3xl"></iconify-icon>
-          <p class="text-lg text-slate-700">{{ $email }}</p>
+
+        <div class="flex items-center gap-3">
+          <iconify-icon icon="tabler:mail" class="text-indigo-600 text-2xl"></iconify-icon>
+          <a href="mailto:{{ $email }}" class="text-slate-700 hover:text-indigo-600 transition-colors">
+            {{ $email }}
+          </a>
         </div>
       </div>
     </div>
 
+    {{-- Garis pemisah --}}
+    <div class="mt-12 border-t border-indigo-100"></div>
+
     {{-- Bottom bar --}}
-    <div class="relative mt-10 border-t border-white/70 pt-6 lg:flex items-center justify-center">
-      <h4 class="text-sm font-normal text-slate-600 text-center lg:text-start">
+    <div class="mt-6 flex flex-col-reverse items-center justify-between gap-4 md:flex-row">
+      <p class="text-sm text-slate-600 text-center md:text-left">
         © {{ $year }} All Rights Reserved by
-        <a href="https://olympusprojct.com" target="_blank" rel="noopener" class="font-medium text-primary hover:underline">
-          OlympusProject
-        </a>
-      </h4>
-      </div>
+        <a href="https://olympusproject.com" target="_blank" rel="noopener"
+           class="font-medium text-indigo-600 hover:underline">OlympusProject</a>
+      </p>
+
+      {{-- Back to top --}}
+      <a href="#top"
+         class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm ring-1 ring-indigo-100 bg-white
+                hover:ring-indigo-300 hover:-translate-y-0.5 transition-all">
+        <iconify-icon icon="tabler:arrow-up" class="text-base text-indigo-700"></iconify-icon>
+        Back to top
+      </a>
     </div>
   </div>
 </footer>

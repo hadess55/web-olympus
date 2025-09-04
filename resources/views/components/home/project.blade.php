@@ -21,7 +21,7 @@
   <div class="container mx-auto lg:max-w-screen-xl md:max-w-screen-md px-4">
     <div class="flex items-center justify-between mb-10">
       <h2 class="text-3xl md:text-4xl font-semibold text-gray-900">
-        Project
+        Projects
       </h2>
       <a href="{{ $seeAllUrl ?? (Route::has('portfolio.index') ? route('portfolio.index') : url('/project')) }}"
          class="text-primary font-medium hover:tracking-widest transition">
